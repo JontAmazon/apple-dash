@@ -2,9 +2,7 @@ const player = document.getElementById('player');
 const monster = document.getElementById('monster');
 const apple = document.getElementById('apple');
 const scoreDisplay = document.getElementById('score');
-const highscoreDisplay = document.getElementById('highScore');
-const finalScoreDisplay = document.getElementById('finalScore');
-const highscoreMenu = document.getElementById('highscoreMenu');
+const playerHighscoreDisplay = document.getElementById('highScore');
 const restartButton = document.getElementById('restartButton');
 
 let score = 0;
@@ -21,8 +19,6 @@ let animationFrameId; // Store requestAnimationFrame ID
 // Keydown and keyup listeners for key presses
 document.addEventListener('keydown', (event) => {
     keyState[event.key] = true;
-
-    // Hotkey for restarting the game ('r')
     if (event.key === 'r') {
         restartGame();
     }
@@ -72,20 +68,18 @@ function endGame() {
 
     previousHighScore = highScore;
     highScore = Math.max(score, highScore); // TODO later: should be for current person...
-    player_name = 'Jonatan' // TODO later: player name.
     if (score > previousHighScore) {
-        submitHighScore(player_name, score);
+        submitHighScore(playerName, score);
     } else {
-        console.log(`Only ${score} apples. Highscore for ${player_name} is ${previousHighScore}`);
+        console.log(`Only ${score} apples. Highscore for ${playerName} is ${previousHighScore}`);
     }
 
     getHighScores();
     // TODO: show highscore menu for 10 people
 
     // Display the high score menu
-    highscoreMenu.style.display = 'block';
-    finalScoreDisplay.textContent = score;
-    highscoreDisplay.textContent = highScore;
+    scoreDisplay.textContent = score;
+    playerHighscoreDisplay.textContent = highScore;
     restartButton.style.display = 'block';
 }
 
@@ -99,7 +93,6 @@ function restartGame() {
     player.style.top = playerY + 'px';
 
     // Hide the high score menu and restart button
-    highscoreMenu.style.display = 'none';
     restartButton.style.display = 'none';
 
     // Reposition the monster and apple
@@ -159,7 +152,7 @@ function getHighScores() {
     fetch('http://localhost:3000/highscores')
     .then(response => response.json())
     .then(data => {
-            console.log('High scores:', data); // TODO: save data to a variable as well; const highscores? or what's the role of const? global variables?
+            console.log('Top 10 high scores:', data); // TODO: save data to a variable as well; const highscores? or what's the role of const? global variables?
         })
         .catch((error) => {
             console.error('Error retrieving high scores:', error);
