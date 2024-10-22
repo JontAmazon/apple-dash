@@ -70,10 +70,21 @@ function endGame() {
     isGameOver = true; // Set game over flag
     cancelAnimationFrame(animationFrameId); // Stop player movement loop
 
+    previousHighScore = highScore;
+    highScore = Math.max(score, highScore); // TODO later: should be for current person...
+    player_name = 'Jonatan' // TODO later: player name.
+    if (score > previousHighScore) {
+        submitHighScore(player_name, score);
+    } else {
+        console.log(`Only ${score} apples. Highscore for ${player_name} is ${previousHighScore}`);
+    }
+
+    getHighScores();
+    // TODO: show highscore menu for 10 people
+
     // Display the high score menu
     highscoreMenu.style.display = 'block';
     finalScoreDisplay.textContent = score;
-    highScore = Math.max(score, highScore);
     highscoreDisplay.textContent = highScore;
     restartButton.style.display = 'block';
 }
@@ -143,6 +154,42 @@ function movePlayer() {
     // Continue game loop
     animationFrameId = requestAnimationFrame(movePlayer);
 }
+
+function getHighScores() {
+    fetch('http://localhost:3000/highscores')
+    .then(response => response.json())
+    .then(data => {
+            console.log('High scores:', data); // TODO: save data to a variable as well; const highscores? or what's the role of const? global variables?
+        })
+        .catch((error) => {
+            console.error('Error retrieving high scores:', error);
+        });
+    }
+    
+function submitHighScore(name, score) {
+    console.log(`new highscore for ${name} - ${score} apples! Submitting to database.`);
+    fetch('http://localhost:3000/highscores', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: name, score: score }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('High score submitted:', data);
+    })
+    .catch((error) => {
+        console.error('Error submitting high score:', error);
+    });
+}
+
+
 
 // Start the game loop
 animationFrameId = requestAnimationFrame(movePlayer);
