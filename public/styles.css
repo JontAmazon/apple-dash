@@ -32,3 +32,19 @@ body {
     height: 20px;
     background: red;
 }
+
+
+
+#scoreboard p {
+    margin: 0; /* Remove default margin for paragraphs */
+}
+
+#scoreboard {
+    margin-top: 10px; /* Adjust this value for vertical spacing */
+    margin-bottom: 10px; /* Adjust this value for vertical spacing */
+}
+
+#scoreboard div {
+    display: flex;
+    align-items: center; /* Center items vertically */
+}

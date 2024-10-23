@@ -12,7 +12,7 @@ app.use(express.json());
 app.post('/highscores', (req, res) => {
     console.log("Received POST request with body:", req.body);
     const { name, score } = req.body; // Make sure this matches your JSON structure
-    db.run('INSERT INTO highscores (name, score) VALUES (?, ?)', [name, score], function(err) {
+    db.run('INSERT OR REPLACE INTO highscores (name, score) VALUES (?, ?)', [name, score], function(err) {
         if (err) {
             return res.status(500).send(err.message);
         }
@@ -29,6 +29,23 @@ app.get('/highscores', (req, res) => {
         }
 
         res.json({ highScores: rows });
+    });
+});
+
+// Route to get the high score of a specific player
+app.get('/highscore/:name', (req, res) => {
+    console.log(`get (specific player)`);
+    const playerName = req.params.name; // Get the player's name from the URL parameter
+    db.get('SELECT score FROM highscores WHERE name = ?', [playerName], (err, row) => {
+        if (err) {
+            console.error('Error retrieving score:', err);
+            return res.status(500).json({ error: 'Database error' });
+        }
+        if (row) {
+            res.json({ name: playerName, highScore: row.score });
+        } else {
+            res.json({ name: playerName, highScore: 0 }); // Return 0 if the player is not found, i.e. first time playing
+        }
     });
 });
 

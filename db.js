@@ -10,10 +10,12 @@ const db = new sqlite3.Database('./highscores.db', (err) => {
 });
 
 // Create a table for high scores (if it doesn't already exist)
+// Ensuring that the 'name' is unique, so only one entry per player
 db.run(`CREATE TABLE IF NOT EXISTS highscores (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
+    name TEXT NOT NULL UNIQUE,
     score INTEGER NOT NULL
 )`);
-
+    
+//db.run(`DROP TABLE IF EXISTS highscores`);
 module.exports = db;
+

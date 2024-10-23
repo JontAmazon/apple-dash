@@ -14,18 +14,33 @@
         <div id="apple"></div>
     </div>
     <!-- Personal High Score -->
+    <!-- Personal High Score -->
     <div id="scoreboard">
         <p>Score: <span id="score">0</span></p>
-        <p>Your High Score: <span id="highScore">0</span></p>
-        <button id="restartButton" style="display: none;">Restart</button>
+        <div style="display: flex; align-items: center;">
+            <p style="margin: 0;">Your High Score: <span id="highScore">0</span></p>
+            <button id="restartButton" style="display: none; margin-left: 15px;">Restart</button>
+        </div>
     </div>
     <!-- Global Score Board Table -->
-    <div id="global-scoreboard-table" style="display: none;">
-        <h2>Global Scoreboard</h2>
-        <p>TODO: fetch top 10 players... <span id="global-score">0</span></p>
+    <div id="global-scoreboard-table">
+        <!-- <h2>Global Scoreboard</h2> or should I call it "Hall of Fame"? :P -->
+        <table id="highscores-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Note: table is updated in endGame (game.js) -->
+            </tbody>
+        </table>
     </div>
 
-    <script src="apple_dash.js"></script>
+    <!-- Game script -->
+    <script src="game.js"></script>
     <script>
         const playerName = localStorage.getItem('playerName');
         console.log('Player Name:', playerName); // Use this in your game logic

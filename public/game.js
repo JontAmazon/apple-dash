@@ -4,6 +4,7 @@ const apple = document.getElementById('apple');
 const scoreDisplay = document.getElementById('score');
 const playerHighscoreDisplay = document.getElementById('highScore');
 const restartButton = document.getElementById('restartButton');
+restartButton.addEventListener('click', restartGame); // OK to have up here?
 
 let score = 0;
 let highScore = 0;
@@ -62,25 +63,25 @@ function checkCollision() {
     }
 }
 
-function endGame() {
+async function endGame() {
     isGameOver = true; // Set game over flag
-    cancelAnimationFrame(animationFrameId); // Stop player movement loop
-
-    previousHighScore = highScore;
-    highScore = Math.max(score, highScore); // TODO later: should be for current person...
-    if (score > previousHighScore) {
-        submitHighScore(playerName, score);
+    highScore = Math.max(score, highScore);
+    previousHighScore = await getPlayerHighScore(playerName);
+    if (highScore > previousHighScore) {
+        console.log(`New all time highscore for ${playerName}`);
+        submitHighScore(playerName, highScore);
     } else {
-        console.log(`Only ${score} apples. Highscore for ${playerName} is ${previousHighScore}`);
+        console.log(`All time highscore for ${playerName} is ${previousHighScore}`);
     }
 
-    getHighScores();
-    // TODO: show highscore menu for 10 people
+    updateGlobalHighScores();
 
     // Display the high score menu
     scoreDisplay.textContent = score;
     playerHighscoreDisplay.textContent = highScore;
     restartButton.style.display = 'block';
+
+    cancelAnimationFrame(animationFrameId); // Stop player movement loop
 }
 
 function restartGame() {
@@ -99,7 +100,6 @@ function restartGame() {
     positionMonster();
     spawnApple();
 
-    // Reset game over flag and re-enable movement
     isGameOver = false;
 
     // Restart the game loop
@@ -148,7 +148,7 @@ function movePlayer() {
     animationFrameId = requestAnimationFrame(movePlayer);
 }
 
-function getHighScores() {
+function getTop10HighScores() {
     fetch('http://localhost:3000/highscores')
     .then(response => response.json())
     .then(data => {
@@ -157,12 +157,31 @@ function getHighScores() {
         .catch((error) => {
             console.error('Error retrieving high scores:', error);
         });
+}
+
+async function getPlayerHighScore(playerName) { 
+    console.log(`getPlayerHighScore`);
+    try {
+        const response = await fetch(`http://localhost:3000/highscore/${playerName}`);
+        const data = await response.json();
+        if (data.highScore !== undefined) {
+            console.log(`High score for ${playerName}:`, data.highScore);
+            return data.highScore;
+        } else {
+            console.log(`Player ${playerName} not found. Return 0`);
+            return 0;
+        }
+    } catch (error) {
+        console.error('Error retrieving player high score:', error);
+        return null;
     }
-    
+}
+
+/* INSERT OR REPLACE INTO highscores (name, score) */
 function submitHighScore(name, score) {
     console.log(`new highscore for ${name} - ${score} apples! Submitting to database.`);
     fetch('http://localhost:3000/highscores', {
-        method: 'POST',
+        method: 'POST', // INSERT OR REPLACE
         headers: {
             'Content-Type': 'application/json',
         },
@@ -182,10 +201,27 @@ function submitHighScore(name, score) {
     });
 }
 
+/** Fetch top 10 players and update table */
+async function updateGlobalHighScores() {
+    const response = await fetch('/highscores');
+    const highScoresJson = await response.json();
+    const highScores = highScoresJson.highScores;
+    const tableBody = document.querySelector('#highscores-table tbody');
+    tableBody.innerHTML = ''; // Clear previous content
 
+    highScores.forEach((score, index) => {
+        const row = `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${score.name}</td>
+                <td>${score.score}</td>
+            </tr>
+        `;
+        tableBody.innerHTML += row;
+    });
+}
 
 // Start the game loop
-animationFrameId = requestAnimationFrame(movePlayer);
-restartButton.addEventListener('click', restartGame);
-positionMonster(); // Set initial monster position
-spawnApple(); // Set initial apple position
+restartGame()
+updateGlobalHighScores();
+
