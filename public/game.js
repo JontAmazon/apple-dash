@@ -64,14 +64,12 @@ function checkCollision() {
 }
 
 async function endGame() {
-    isGameOver = true; // Set game over flag
+    isGameOver = true;
     highScore = Math.max(score, highScore);
     previousHighScore = await getPlayerHighScore(playerName);
     if (highScore > previousHighScore) {
-        console.log(`New all time highscore for ${playerName}`);
+        console.log(`New all time highscore for ${playerName}: ${score}`);
         submitHighScore(playerName, highScore);
-    } else {
-        console.log(`All time highscore for ${playerName} is ${previousHighScore}`);
     }
 
     updateGlobalHighScores();
@@ -165,7 +163,6 @@ async function getPlayerHighScore(playerName) {
         const response = await fetch(`http://localhost:3000/highscore/${playerName}`);
         const data = await response.json();
         if (data.highScore !== undefined) {
-            console.log(`High score for ${playerName}:`, data.highScore);
             return data.highScore;
         } else {
             console.log(`Player ${playerName} not found. Return 0`);
@@ -179,7 +176,6 @@ async function getPlayerHighScore(playerName) {
 
 /* INSERT OR REPLACE INTO highscores (name, score) */
 function submitHighScore(name, score) {
-    console.log(`new highscore for ${name} - ${score} apples! Submitting to database.`);
     fetch('http://localhost:3000/highscores', {
         method: 'POST', // INSERT OR REPLACE
         headers: {
