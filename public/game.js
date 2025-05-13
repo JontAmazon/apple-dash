@@ -4,7 +4,7 @@ const apple = document.getElementById('apple');
 const scoreDisplay = document.getElementById('score');
 const playerHighscoreDisplay = document.getElementById('highScore');
 const restartButton = document.getElementById('restartButton');
-restartButton.addEventListener('click', restartGame); // OK to have up here?
+restartButton.addEventListener('click', restartGame);
 
 let score = 0;
 let highScore = 0;
@@ -101,7 +101,7 @@ function restartGame() {
     isGameOver = false;
 
     // Restart the game loop
-    cancelAnimationFrame(animationFrameId); // Ensure no duplicate loops
+    cancelAnimationFrame(animationFrameId);
     animationFrameId = requestAnimationFrame(movePlayer);
 }
 
@@ -147,7 +147,8 @@ function movePlayer() {
 }
 
 function getTop10HighScores() {
-    fetch('http://localhost:3000/highscores')
+    // fetch('http://localhost:3000/highscores')
+    fetch('/data/highscores')
     .then(response => response.json())
     .then(data => {
             console.log('Top 10 high scores:', data); // TODO: save data to a variable as well; const highscores? or what's the role of const? global variables?
@@ -160,7 +161,8 @@ function getTop10HighScores() {
 async function getPlayerHighScore(playerName) { 
     console.log(`getPlayerHighScore`);
     try {
-        const response = await fetch(`http://localhost:3000/highscore/${playerName}`);
+        // const response = await fetch(`http://localhost:3000/highscore/${playerName}`);
+        const response = await fetch(`/data/highscore/${playerName}`);
         const data = await response.json();
         if (data.highScore !== undefined) {
             return data.highScore;
@@ -176,7 +178,8 @@ async function getPlayerHighScore(playerName) {
 
 /* INSERT OR REPLACE INTO highscores (name, score) */
 function submitHighScore(name, score) {
-    fetch('http://localhost:3000/highscores', {
+    // fetch('http://localhost:3000/highscores', {
+    fetch('/data/highscores', {
         method: 'POST', // INSERT OR REPLACE
         headers: {
             'Content-Type': 'application/json',
@@ -199,7 +202,7 @@ function submitHighScore(name, score) {
 
 /** Fetch top 10 players and update table */
 async function updateGlobalHighScores() {
-    const response = await fetch('/highscores');
+    const response = await fetch('/data/highscores');
     const highScoresJson = await response.json();
     const highScores = highScoresJson.highScores;
     const tableBody = document.querySelector('#highscores-table tbody');

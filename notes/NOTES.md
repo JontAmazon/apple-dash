@@ -11,10 +11,19 @@
 3. open http://localhost:3000/game.html and start playing.
 If "normal" command prompt and not in VSCode, nodemon works.
 
+# new way: fly.io
+
+--------------
+
+# express:
+// Note: in server.js we start by importing Express.js,
+// a web server library with methods for e.g.:
+// - serve files like index.html
+// - listen for HTTP requests
+// - handle POST data
 
 
-
-# EV:
+# EVEV:
 # JavaScript topics I could explore
 - DOMContentLoader
     - omit until it's needed?
