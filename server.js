@@ -48,11 +48,7 @@ app.get('/data/highscore/:name', (req, res) => {
             console.error('Error retrieving score:', err);
             return res.status(500).json({ error: 'Database error' });
         }
-        if (row) {
-            res.json({ name: playerName, highScore: row.score });
-        } else {
-            res.json({ name: playerName, highScore: 0 }); // Return 0 if the player is not found, i.e. first time playing
-        }
+        res.json({ name: playerName, highScore: row ? row.score : 0 });
     });
 });
 
