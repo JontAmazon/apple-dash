@@ -146,17 +146,15 @@ function movePlayer() {
     animationFrameId = requestAnimationFrame(movePlayer);
 }
 
+/*
 function getTop10HighScores() {
     // fetch('http://localhost:3000/highscores')
     fetch('/data/highscores')
-    .then(response => response.json())
-    .then(data => {
-            console.log('Top 10 high scores:', data); // TODO: save data to a variable as well; const highscores? or what's the role of const? global variables?
-        })
-        .catch((error) => {
-            console.error('Error retrieving high scores:', error);
-        });
+    .then(res => res.json())
+    .then(data => console.log('Top 10 high scores:', data))
+    .catch((err) => console.error('Error retrieving high scores:', err));
 }
+*/
 
 async function getPlayerHighScore(playerName) { 
     console.log(`getPlayerHighScore`);
