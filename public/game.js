@@ -75,8 +75,8 @@ async function endGame() {
     updateGlobalHighScores();
 
     // Display the high score menu
+    // playerHighscoreDisplay.textContent = highScore; // nah, cleaner without this.
     scoreDisplay.textContent = score;
-    playerHighscoreDisplay.textContent = highScore;
     restartButton.style.display = 'block';
 
     cancelAnimationFrame(animationFrameId); // Stop player movement loop
@@ -146,16 +146,6 @@ function movePlayer() {
     animationFrameId = requestAnimationFrame(movePlayer);
 }
 
-/*
-function getTop10HighScores() {
-    // fetch('http://localhost:3000/highscores')
-    fetch('/data/highscores')
-    .then(res => res.json())
-    .then(data => console.log('Top 10 high scores:', data))
-    .catch((err) => console.error('Error retrieving high scores:', err));
-}
-*/
-
 async function getPlayerHighScore(playerName) { 
     console.log(`getPlayerHighScore`);
     try {
@@ -209,7 +199,6 @@ async function updateGlobalHighScores() {
     highScores.forEach((score, index) => {
         const row = `
             <tr>
-                <td>${index + 1}</td>
                 <td>${score.name}</td>
                 <td>${score.score}</td>
             </tr>
@@ -222,3 +211,16 @@ async function updateGlobalHighScores() {
 restartGame()
 updateGlobalHighScores();
 
+
+
+
+/*
+not used.
+function getTop10HighScores() {
+    // fetch('http://localhost:3000/highscores')
+    fetch('/data/highscores')
+    .then(res => res.json())
+    .then(data => console.log('Top 10 high scores:', data))
+    .catch((err) => console.error('Error retrieving high scores:', err));
+}
+*/

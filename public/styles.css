@@ -49,10 +49,12 @@ body {
     align-items: center; /* Center items vertically */
 }
 
-#highscores-table th:nth-child(2),
-#highscores-table th:nth-child(3),
-#highscores-table td:nth-child(2),
-#highscores-table td:nth-child(3) {
+#highscores-table th:nth-child(1),
+#highscores-table th:nth-child(2) {
     text-align: left;  /* Left-align both columns */
-    padding-left: 8px; /* Adds spacing to the left */
+}
+
+#highscores-table th:nth-child(2),
+#highscores-table td:nth-child(2) {
+    padding-left: 8px; /* Adds spacing to the 2nd column */
 }
