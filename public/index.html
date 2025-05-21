@@ -9,9 +9,20 @@
 <body>
     <h1>Apple Dash</h1>
     <label for="playerName">Enter your name:</label>
-    <input type="text" id="playerName" placeholder="Your Name" required>
+    <input type="text" id="playerName" placeholder="Your Name" maxlength="20" required>
     <button id="startGameButton">Start Game</button>
 
     <script src="landing.js"></script>
+
+    <script>
+        // Start game when 'Enter' is pressed anywhere, but only if input is focused
+        const startButton = document.getElementById('startGameButton');
+        const playerNameInput = document.getElementById('playerName');
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && document.activeElement === playerNameInput) {
+                startButton.click();
+            }
+        });
+    </script>
 </body>
 </html>
