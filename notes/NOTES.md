@@ -8,16 +8,16 @@
 # working node setup:
 1. npm init -y
 2. node server.js
-3. open http://localhost:3000/game.html and start playing.
-If "normal" command prompt and not in VSCode, nodemon works.
+3. localhost:3000/index.html
+note: If "normal" command prompt and not in VSCode, nodemon works.
 
 # new way: fly.io
+(deploy with "fly deploy")
 
 --------------
 
 # express:
-// Note: in server.js we start by importing Express.js,
-// a web server library with methods for e.g.:
+// Note: server.js imports Express.js, a web server library:
 // - serve files like index.html
 // - listen for HTTP requests
 // - handle POST data

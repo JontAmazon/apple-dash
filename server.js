@@ -1,10 +1,12 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const app = express();
-const PORT = 3000;
+// const PORT = 3000; // TODO: I think this works for both localhost and Fly.io?
+const PORT = process.env.PORT || 3000;
 
-// Database
-const db = new sqlite3.Database('/data/highscores.db');
+// Database - handle both localhost and Fly.io
+const dbPath = process.env.FLY_APP_NAME ? '/data/highscores.db' : './highscores.db';
+const db = new sqlite3.Database(dbPath);
 db.run(`CREATE TABLE IF NOT EXISTS highscores (
     name TEXT NOT NULL UNIQUE,
     score INTEGER NOT NULL
@@ -12,7 +14,9 @@ db.run(`CREATE TABLE IF NOT EXISTS highscores (
 
 // Middleware
 app.use(express.json());
-app.use(express.static('public'));
+// app.use(express.static('public'));
+const path = require('path');
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
 

@@ -10,11 +10,21 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^17.2.1",
     "express": "^4.21.2",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.7.10"
   },
-  "description": ""
+  "description": "A very simple web game where you collect apples and try to set a high score. Built with HTML, CSS, JavaScript, and a Node.js + SQLite backend.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JontAmazon/apple_dash.git"
+  },
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/JontAmazon/apple_dash/issues"
+  },
+  "homepage": "https://github.com/JontAmazon/apple_dash#readme"
 }
